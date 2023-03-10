@@ -43,8 +43,12 @@ void mntBigNorm(bigDecimal* val1, bigDecimal* val2);
 int mntBigComp(bigDecimal val1, bigDecimal val2);
 int fixBigOverflow(bigDecimal* val);
 int mntBigDivByTen(bigDecimal dividend, bigDecimal* res, bigDecimal* remainder);
+
+void mntBigAdd(bigDecimal val1, bigDecimal val2, bigDecimal* res);
 int mntBigSub(bigDecimal val1, bigDecimal val2, bigDecimal* res);
 int mntBigMul(bigDecimal val1, bigDecimal val2, bigDecimal* res);
+int mntBigDiv(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
+              bigDecimal* rem);
 //----------------------------------
 
 void s21_zero_exp(s21_decimal* val);
@@ -63,7 +67,6 @@ void mntCpyBig2Std(bigDecimal* val1, s21_decimal* val2);
 void mntCpyStd2Big(s21_decimal* val1, bigDecimal* val2);
 void mntCpyBig2Big(bigDecimal* val1, bigDecimal* val2);
 
-void mntBigAdd(bigDecimal val1, bigDecimal val2, bigDecimal* res);
 int mntAdd(s21_decimal val1, s21_decimal val2, s21_decimal* res);
 
 int mntSub(s21_decimal val1, s21_decimal val2, s21_decimal* res);

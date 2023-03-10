@@ -465,6 +465,28 @@ int mntBigMul(bigDecimal val1, bigDecimal val2, bigDecimal* res) {
 //     return ret;
 // }
 
+int mntBigDiv(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
+              bigDecimal* rem) {
+    int ret = 0;
+
+    mntBigZero(res);
+    mntBigZero(rem);
+
+    for (int i = 191; i >= 0; i--) {
+        mntBigShiftLeft(rem, 1);
+
+        rem->pat.mnt1 |= isSetBit(dividend.bits, i);
+        if (mntBigComp(*rem, divisor) != 2) {
+            mntBigSub(*rem, divisor, rem);
+            setBit(res->bits, i);
+        }
+    }
+
+    res->pat.sgn = dividend.pat.sgn ^ divisor.pat.sgn;
+
+    return ret;
+}
+
 int mntBigDivByTen(bigDecimal dividend, bigDecimal* res,
                    bigDecimal* remainder) {
     bigDecimal ten = {{10, 0, 0, 0, 0, 0, 0}};
