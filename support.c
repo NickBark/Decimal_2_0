@@ -395,6 +395,23 @@ void mntBigAdd(bigDecimal val1, bigDecimal val2, bigDecimal* res) {
     }
 }
 
+int mntBigMul(bigDecimal val1, bigDecimal val2, bigDecimal* res) {
+    int ret = 0;
+    int rank = 192;
+
+    mntBigZero(res);
+
+    for (int i = rank - 1; i != -1; i--) {
+        if (isSetBit(val2.bits, i)) {
+            mntBigShiftLeft(&val1, i);
+            mntBigAdd(*res, val1, res);
+            mntBigShiftRight(&val1, i);
+        }
+    }
+    res->pat.sgn = val1.pat.sgn ^ val2.pat.sgn;
+    return ret;
+}
+
 //С учетом знака
 // 0 - OK
 // 1 - INF
@@ -410,13 +427,13 @@ void mntBigAdd(bigDecimal val1, bigDecimal val2, bigDecimal* res) {
 //     mntCpyStd2Big(&val1, &bigVal1);
 //     mntCpyStd2Big(&val2, &bigVal2);
 
-//     for (int i = rank - 1; i != -1; i--) {
-//         if (isSetBit(bigVal2.bits, i)) {
-//             mntBigShiftLeft(&bigVal1, i);
-//             mntBigAdd(mult, bigVal1, &mult);
-//             mntBigShiftRight(&bigVal1, i);
-//         }
+// for (int i = rank - 1; i != -1; i--) {
+//     if (isSetBit(bigVal2.bits, i)) {
+//         mntBigShiftLeft(&bigVal1, i);
+//         mntBigAdd(mult, bigVal1, &mult);
+//         mntBigShiftRight(&bigVal1, i);
 //     }
+// }
 //     printBigBit(mult);
 //     if (fixOverflow(&mult, res)) ret = 1;
 //     // округлить результат <---

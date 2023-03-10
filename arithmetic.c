@@ -39,39 +39,6 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 // 0 - OK
 // 1 - INF
 // 2 - MINF
-// int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-//     int ret = 0;
-//     int neg = value_1.pat.sgn && value_2.pat.sgn ? 1 : 0;
-//     int operation = ADD;
-
-//     s21_zero_exp(result);
-//     mntZero(result);
-
-//     normalozation(&value_1, &value_2);
-//     result->pat.exp = value_1.pat.exp;
-
-//     if (!(value_1.pat.sgn ^ value_2.pat.sgn)) {
-//         if (equalInf(value_1, value_2, operation)) {
-//             ret = 1;
-//         } else if (equalMinf(value_1, value_2, operation)) {
-//             ret = 2;
-//         } else {
-//             mntAdd(value_1, value_2, result);
-//             result->pat.sgn = neg ? 1 : 0;
-//         }
-//     } else {
-//         mntSub(value_1, value_2, result);
-//         result->pat.sgn =
-//             mnt_comp(value_1, value_2) == 1 ? value_1.pat.sgn :
-//             value_2.pat.sgn;
-//     }
-
-//     return ret;
-// }
-
-// 0 - OK
-// 1 - INF
-// 2 - MINF
 int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     int ret = 0;
     int overflow = 0;
@@ -114,19 +81,29 @@ int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 // // 0 - OK
 // // 1 - INF
 // // 2 - MINF
-// int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-//     int ret = 0;
+int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+    int ret = 0;
+    int overflow = 0;
 
-//     result->pat.exp = value_1.pat.exp + value_2.pat.exp;
+    bigDecimal bigRes = {};
+    bigDecimal bigVal1 = {};
+    bigDecimal bigVal2 = {};
 
-//     if (mntMul(value_1, value_2, result)) {
-//         if (result->pat.sgn == 1)
-//             ret = 2;
-//         else
-//             ret = 1;
-//     };
-//     return ret;
-// }
+    s21_zero_exp(result);
+    mntZero(result);
+
+    mntCpyStd2Big(&value_1, &bigVal1);
+    mntCpyStd2Big(&value_2, &bigVal2);
+
+    bigRes.pat.exp = bigVal1.pat.exp + bigVal2.pat.exp;
+    mntBigMul(bigVal1, bigVal2, &bigRes);
+    if (fixBigOverflow(&bigRes)) overflow = 1;
+    mntCpyBig2Std(&bigRes, result);
+
+    if (overflow) ret = result->pat.sgn ? 2 : 1;
+
+    return ret;
+}
 
 // // 0 - OK
 // // 1 - INF

@@ -44,6 +44,7 @@ int mntBigComp(bigDecimal val1, bigDecimal val2);
 int fixBigOverflow(bigDecimal* val);
 int mntBigDivByTen(bigDecimal dividend, bigDecimal* res, bigDecimal* remainder);
 int mntBigSub(bigDecimal val1, bigDecimal val2, bigDecimal* res);
+int mntBigMul(bigDecimal val1, bigDecimal val2, bigDecimal* res);
 //----------------------------------
 
 void s21_zero_exp(s21_decimal* val);
