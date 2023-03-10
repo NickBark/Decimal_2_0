@@ -1,6 +1,9 @@
 #include "s21_decimal.h"
 #include "support.h"
 
+// 0 - OK
+// 1 - INF
+// 2 - MINF
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     int ret = 0;
     int overflow = 0;
@@ -151,30 +154,8 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     return ret;
 }
 
-// int s21_div_2(s21_decimal value_1, s21_decimal value_2, s21_decimal *result)
-// {
-//     int ret = 0;
-//     int sgn = value_1.pat.sgn ^ value_2.pat.sgn ? 1 : 0;
-//     int scale = value_1.pat.exp - value_2.pat.exp;
+int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+    int ret = 0;
 
-//     s21_decimal remainder = {};
-//     s21_decimal zero = {};
-//     s21_decimal tmp = {};
-
-//     s21_zero_exp(result);
-//     mntZero(result);
-
-//     mntDiv(value_1, value_2, result, &remainder);
-
-//     while ((mnt_comp(remainder, zero) != 0) && (scale < 28)) {
-//         multByTen(&remainder);
-//         multByTen(result);
-//         scale++;
-//         mntDiv(remainder, value_2, &tmp, &remainder);
-//         printf("%u\n", tmp.bits[0]);
-//         mntAdd(*result, tmp, result);
-//     }
-//     result->pat.exp = (unsigned int)scale;
-//     result->pat.sgn = sgn ? 1 : 0;
-//     return ret;
-// }
+    return ret;
+}
