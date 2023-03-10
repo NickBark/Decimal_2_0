@@ -22,20 +22,20 @@ int will_overflow(int a, int b) {
 }
 
 int main() {
-    s21_decimal ppp1 = {{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x80000000}};
-    s21_decimal ppp2 = {{6, 0x00000000, 0x00000000, 0x00000000}};
+    s21_decimal ppp1 = {{0xffffffff, 0xffffffff, 0xffffffff, 0x00000000}};
+    s21_decimal ppp2 = {{1, 0x00000000, 0x00000000, 0x00000000}};
     s21_decimal res = {};
     s21_decimal rem = {};
     ppp1.pat.exp = 0;
-    ppp2.pat.exp = 28;
-
-    s21_add(ppp1, ppp2, &res);
+    ppp2.pat.exp = 1;
 
     printf("ppp1:");
     printBit(ppp1);
 
     printf("ppp2:");
     printBit(ppp2);
+
+    printf("res: %u\n", s21_sub(ppp1, ppp2, &res));
 
     printf("rest:");
     printBit(res);

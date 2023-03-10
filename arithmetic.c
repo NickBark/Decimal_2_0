@@ -24,7 +24,6 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
         bigRes.pat.sgn = neg ? 1 : 0;
     } else {
         mntBigSub(bigVal1, bigVal2, &bigRes);
-        printBigBit(bigRes);
         if (fixBigOverflow(&bigRes)) overflow = 1;
         bigRes.pat.sgn = mntBigComp(bigVal1, bigVal2) == 1 ? bigVal1.pat.sgn
                                                            : bigVal2.pat.sgn;
@@ -73,32 +72,44 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 // 0 - OK
 // 1 - INF
 // 2 - MINF
-// int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
-//     int ret = 0;
-//     int overflow = 0;
-//     s21_decimal zero = {};
+int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+    int ret = 0;
+    int overflow = 0;
+    s21_decimal zero = {};
 
-//     s21_zero_exp(result);
-//     mntZero(result);
-//     printBit(value_2);
+    bigDecimal bigRes = {};
+    bigDecimal bigVal1 = {};
+    bigDecimal bigVal2 = {};
 
-//     normalozation(&value_1, &value_2);
-//     result->pat.exp = value_1.pat.exp;
+    s21_zero_exp(result);
+    mntZero(result);
 
-//     if (value_1.pat.sgn ^ value_2.pat.sgn) {
-//         if (mntAdd(value_1, value_2, result)) overflow = 1;
-//         result->pat.sgn = value_1.pat.sgn ? 1 : 0;
-//         if (overflow) ret = result->pat.sgn ? 2 : 1;
-//     } else {
-//         if (mntSub(value_1, value_2, result)) overflow = 1;
-//         if (value_1.pat.sgn) result->pat.sgn = !result->pat.sgn;
-//         if (overflow) ret = result->pat.sgn ? 2 : 1;
-//     }
+    mntCpyStd2Big(&value_1, &bigVal1);
+    mntCpyStd2Big(&value_2, &bigVal2);
 
-//     if (!mnt_comp(*result, zero)) result->pat.sgn = 0;
+    bigNormalization(&bigVal1, &bigVal2);
+    bigRes.pat.exp = bigVal1.pat.exp;
 
-//     return ret;
-// }
+    if (bigVal1.pat.sgn ^ bigVal2.pat.sgn) {
+        mntBigAdd(bigVal1, bigVal2, &bigRes);
+        if (fixBigOverflow(&bigRes)) overflow = 1;
+        bigRes.pat.sgn = bigVal1.pat.sgn ? 1 : 0;
+        if (overflow) ret = bigRes.pat.sgn ? 2 : 1;
+    } else {
+        mntBigSub(bigVal1, bigVal2, &bigRes);
+        if (fixBigOverflow(&bigRes)) overflow = 1;
+        if (bigVal1.pat.sgn) bigRes.pat.sgn = !bigRes.pat.sgn;
+        if (overflow) ret = bigRes.pat.sgn ? 2 : 1;
+    }
+
+    mntCpyBig2Std(&bigRes, result);
+
+    if (overflow) ret = result->pat.sgn ? 2 : 1;
+
+    if (!mnt_comp(*result, zero)) result->pat.sgn = 0;
+
+    return ret;
+}
 
 // // 0 - OK
 // // 1 - INF
