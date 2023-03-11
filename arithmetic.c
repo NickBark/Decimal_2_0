@@ -166,10 +166,8 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     } else {
         s21_zero_exp(result);
         mntZero(result);
-
         mntBigDiv(bigVal1, bigVal2, &bigRes, &remainder);
         divBigEngine(bigVal1, bigVal2, &bigRes, remainder);
-
         fixBigOverflow(&bigRes);
         mntBigTruncate(&bigRes);
         mntBigMul(bigRes, bigVal2, &bigRes);
@@ -178,9 +176,7 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 
         bigNormalization(&bigVal1, &bigRes);
         mntBigSub(bigVal1, bigRes, &bigRes);
-
         bigRes.pat.sgn = bigVal1.pat.sgn & bigVal2.pat.sgn;
-
         if (fixBigOverflow(&bigRes)) overflow = 1;
         if (overflow) mntBigTruncate(&bigRes);
         mntCpyBig2Std(&bigRes, result);

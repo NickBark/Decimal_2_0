@@ -5,9 +5,14 @@ int s21_is_less(s21_decimal val1, s21_decimal val2) {
     int res = 0;
     int neg = 0;
     int comp = 0;
+    bigDecimal v1 = {};
+    bigDecimal v2 = {};
 
     s21_zero_exp(&val1);
     s21_zero_exp(&val2);
+
+    mntCpyStd2Big(&val1, &v1);
+    mntCpyStd2Big(&val2, &v2);
 
     neg = val1.pat.sgn && val2.pat.sgn ? 1 : 0;
     comp = mnt_comp(val1, val2);
@@ -29,8 +34,8 @@ int s21_is_less(s21_decimal val1, s21_decimal val2) {
         res = (comp == 2) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     } else {
-        normalozation(&val1, &val2);
-        comp = mnt_comp(val1, val2);
+        bigNormalization(&v1, &v2);
+        comp = mntBigComp(v1, v2);
         res = (comp == 2) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     }
@@ -43,8 +48,14 @@ int s21_is_less_or_equal(s21_decimal val1, s21_decimal val2) {
     int neg = 0;
     int comp = 0;
 
+    bigDecimal v1 = {};
+    bigDecimal v2 = {};
+
     s21_zero_exp(&val1);
     s21_zero_exp(&val2);
+
+    mntCpyStd2Big(&val1, &v1);
+    mntCpyStd2Big(&val2, &v2);
 
     neg = val1.pat.sgn && val2.pat.sgn ? 1 : 0;
     comp = mnt_comp(val1, val2);
@@ -66,8 +77,8 @@ int s21_is_less_or_equal(s21_decimal val1, s21_decimal val2) {
         res = (comp == 2 || comp == 0) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     } else {
-        normalozation(&val1, &val2);
-        comp = mnt_comp(val1, val2);
+        bigNormalization(&v1, &v2);
+        comp = mntBigComp(v1, v2);
         res = (comp == 2 || comp == 0) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     }
@@ -80,8 +91,14 @@ int s21_is_greater(s21_decimal val1, s21_decimal val2) {
     int neg = 0;
     int comp = 0;
 
+    bigDecimal v1 = {};
+    bigDecimal v2 = {};
+
     s21_zero_exp(&val1);
     s21_zero_exp(&val2);
+
+    mntCpyStd2Big(&val1, &v1);
+    mntCpyStd2Big(&val2, &v2);
 
     neg = val1.pat.sgn && val2.pat.sgn ? 1 : 0;
     comp = mnt_comp(val1, val2);
@@ -103,8 +120,8 @@ int s21_is_greater(s21_decimal val1, s21_decimal val2) {
         res = (comp == 1) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     } else {
-        normalozation(&val1, &val2);
-        comp = mnt_comp(val1, val2);
+        bigNormalization(&v1, &v2);
+        comp = mntBigComp(v1, v2);
         res = (comp == 1) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     }
@@ -117,8 +134,14 @@ int s21_is_greater_or_equal(s21_decimal val1, s21_decimal val2) {
     int neg = 0;
     int comp = 0;
 
+    bigDecimal v1 = {};
+    bigDecimal v2 = {};
+
     s21_zero_exp(&val1);
     s21_zero_exp(&val2);
+
+    mntCpyStd2Big(&val1, &v1);
+    mntCpyStd2Big(&val2, &v2);
 
     neg = val1.pat.sgn && val2.pat.sgn ? 1 : 0;
     comp = mnt_comp(val1, val2);
@@ -140,8 +163,8 @@ int s21_is_greater_or_equal(s21_decimal val1, s21_decimal val2) {
         res = (comp == 1 || comp == 0) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     } else {
-        normalozation(&val1, &val2);
-        comp = mnt_comp(val1, val2);
+        bigNormalization(&v1, &v2);
+        comp = mntBigComp(v1, v2);
         res = (comp == 1 || comp == 0) ? 1 : 0;
         if (neg && comp != 0) res = !res;
     }
@@ -153,8 +176,14 @@ int s21_is_equal(s21_decimal val1, s21_decimal val2) {
     int res = 0;
     int comp = 0;
 
+    bigDecimal v1 = {};
+    bigDecimal v2 = {};
+
     s21_zero_exp(&val1);
     s21_zero_exp(&val2);
+
+    mntCpyStd2Big(&val1, &v1);
+    mntCpyStd2Big(&val2, &v2);
 
     comp = mnt_comp(val1, val2);
 
@@ -174,8 +203,8 @@ int s21_is_equal(s21_decimal val1, s21_decimal val2) {
     } else if (val1.pat.exp == val2.pat.exp) {
         res = (comp == 0) ? 1 : 0;
     } else {
-        normalozation(&val1, &val2);
-        comp = mnt_comp(val1, val2);
+        bigNormalization(&v1, &v2);
+        comp = mntBigComp(v1, v2);
         res = (comp == 0) ? 1 : 0;
     }
 
@@ -186,8 +215,14 @@ int s21_is_not_equal(s21_decimal val1, s21_decimal val2) {
     int res = 0;
     int comp = 0;
 
+    bigDecimal v1 = {};
+    bigDecimal v2 = {};
+
     s21_zero_exp(&val1);
     s21_zero_exp(&val2);
+
+    mntCpyStd2Big(&val1, &v1);
+    mntCpyStd2Big(&val2, &v2);
 
     comp = mnt_comp(val1, val2);
 
@@ -207,8 +242,8 @@ int s21_is_not_equal(s21_decimal val1, s21_decimal val2) {
     } else if (val1.pat.exp == val2.pat.exp) {
         res = (comp == 0) ? 0 : 1;
     } else {
-        normalozation(&val1, &val2);
-        comp = mnt_comp(val1, val2);
+        bigNormalization(&v1, &v2);
+        comp = mntBigComp(v1, v2);
         res = (comp == 0) ? 0 : 1;
     }
 
