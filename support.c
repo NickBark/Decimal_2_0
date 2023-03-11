@@ -497,7 +497,8 @@ void divBigEngine(bigDecimal dividend, bigDecimal divisor, bigDecimal* bigRes,
     bigDecimal zero = {};
     bigDecimal tmp = {};
 
-    while ((mntBigComp(remainder, zero) != 0) && (scale < 28)) {
+    // надо тестить (было && вместо ||)
+    while ((mntBigComp(remainder, zero) != 0) || (scale < 28)) {
         multBigTen(&remainder);
         multBigTen(bigRes);
         scale++;
@@ -705,8 +706,6 @@ void mntBigTruncate(bigDecimal* val) {
 void mntBigRound(bigDecimal* val, bigDecimal rem) {
     if (rem.pat.mnt1 == (uint32_t)5) {
         if (val->pat.mnt1 % (uint32_t)2 == 1) val->pat.mnt1++;
-    } else if (rem.pat.mnt1 < (uint32_t)5) {
-        val->pat.mnt1--;
     } else if (rem.pat.mnt1 > (uint32_t)5) {
         val->pat.mnt1++;
     }

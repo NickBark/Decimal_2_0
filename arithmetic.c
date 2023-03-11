@@ -132,10 +132,8 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     } else {
         s21_zero_exp(result);
         mntZero(result);
-
         mntBigDiv(bigVal1, bigVal2, &bigRes, &remainder);
         divBigEngine(bigVal1, bigVal2, &bigRes, remainder);
-
         if (fixBigOverflow(&bigRes)) overflow = 1;
         mntCpyBig2Std(&bigRes, result);
         if (overflow) ret = result->pat.sgn ? 2 : 1;
