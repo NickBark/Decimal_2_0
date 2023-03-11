@@ -49,6 +49,16 @@ int mntBigSub(bigDecimal val1, bigDecimal val2, bigDecimal* res);
 int mntBigMul(bigDecimal val1, bigDecimal val2, bigDecimal* res);
 int mntBigDiv(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
               bigDecimal* rem);
+void mntBigTruncate(bigDecimal* val);
+void mntBigShiftLeft(bigDecimal* val, int shift);
+void mntBigShiftRight(bigDecimal* val, int shift);
+
+// альтернатива
+int mntBigDiv2(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
+               bigDecimal* rem);
+
+void divBigEngine(bigDecimal dividend, bigDecimal divisor, bigDecimal* bigRes,
+                  bigDecimal remainder);
 //----------------------------------
 
 void s21_zero_exp(s21_decimal* val);
@@ -56,8 +66,7 @@ void normalozation(s21_decimal* val1, s21_decimal* val2);
 int mnt_comp(s21_decimal val1, s21_decimal val2);
 
 // Shift func
-void mntBigShiftLeft(bigDecimal* val, int shift);
-void mntBigShiftRight(bigDecimal* val, int shift);
+
 void mntShiftLeft(s21_decimal* val, int shift);
 void mntShiftRight(s21_decimal* val, int shift);
 

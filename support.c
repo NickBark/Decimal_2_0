@@ -284,15 +284,17 @@ void mntCpyStd2Big(s21_decimal* val1, bigDecimal* val2) {
 int fixBigOverflow(bigDecimal* val) {
     int ret = 0;
     bigDecimal rem = {};
+    bigDecimal max = {{0xffffffff, 0xffffffff, 0xffffffff, 0, 0, 0, 0}};
 
     while (val->bits[3] || val->bits[4] || val->bits[5]) {
-        mntBigDivByTen(*val, val, &rem);
-
+        if (!(mntBigComp(max, *val))) ret = 1;
         if (val->pat.exp)
             val->pat.exp--;
         else
             ret = 1;
+        mntBigDivByTen(*val, val, &rem);
     }
+    // Проверка бесконечности
 
     // округление
     return ret;
@@ -487,6 +489,24 @@ int mntBigDiv(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
     return ret;
 }
 
+void divBigEngine(bigDecimal dividend, bigDecimal divisor, bigDecimal* bigRes,
+                  bigDecimal remainder) {
+    int sgn = dividend.pat.sgn ^ divisor.pat.sgn ? 1 : 0;
+    int scale = dividend.pat.exp - divisor.pat.exp;
+    bigDecimal zero = {};
+    bigDecimal tmp = {};
+
+    while ((mntBigComp(remainder, zero) != 0) && (scale < 28)) {
+        multBigTen(&remainder);
+        multBigTen(bigRes);
+        scale++;
+        mntBigDiv(remainder, divisor, &tmp, &remainder);
+        mntBigAdd(*bigRes, tmp, bigRes);
+    }
+    bigRes->pat.exp = (unsigned int)scale;
+    bigRes->pat.sgn = sgn ? 1 : 0;
+}
+
 int mntBigDivByTen(bigDecimal dividend, bigDecimal* res,
                    bigDecimal* remainder) {
     bigDecimal ten = {{10, 0, 0, 0, 0, 0, 0}};
@@ -504,6 +524,31 @@ int mntBigDivByTen(bigDecimal dividend, bigDecimal* res,
             setBit(res->bits, i);
         }
     }
+
+    return ret;
+}
+
+int mntBigDiv2(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
+               bigDecimal* rem) {
+    bigDecimal tmp = {};
+    int ret = 0;
+    int offset = 0;
+
+    mntBigZero(res);
+
+    while (mntBigComp(dividend, divisor) == 1) {
+        offset = 0;
+        mntCpyBig2Big(&divisor, &tmp);
+        while (mntBigComp(tmp, dividend) == 2) {
+            offset++;
+            mntBigShiftLeft(&tmp, 1);
+        }
+        offset--;
+        mntBigShiftRight(&tmp, 1);
+        setBit(res->bits, offset);
+        mntBigSub(dividend, tmp, &dividend);
+    }
+    mntCpyBig2Big(&dividend, rem);
 
     return ret;
 }
@@ -645,3 +690,13 @@ void printBigBit(bigDecimal val) {
 
 //     return ret;
 // }
+
+// С сохранением конечных нулей
+void mntBigTruncate(bigDecimal* val) {
+    uint32_t scale = (uint32_t)val->pat.exp;
+    bigDecimal rem = {};
+    while (scale) {
+        mntBigDivByTen(*val, val, &rem);
+        scale--;
+    }
+}

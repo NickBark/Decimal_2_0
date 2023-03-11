@@ -63,6 +63,7 @@ int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     if (bigVal1.pat.sgn ^ bigVal2.pat.sgn) {
         mntBigAdd(bigVal1, bigVal2, &bigRes);
         if (fixBigOverflow(&bigRes)) overflow = 1;
+
         bigRes.pat.sgn = bigVal1.pat.sgn ? 1 : 0;
         if (overflow) ret = bigRes.pat.sgn ? 2 : 1;
     } else {
@@ -114,8 +115,7 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 // // 3 - div by zero
 int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     int ret = 0;
-    int sgn = value_1.pat.sgn ^ value_2.pat.sgn ? 1 : 0;
-    int scale = value_1.pat.exp - value_2.pat.exp;
+
     int overflow = 0;
 
     bigDecimal bigRes = {};
@@ -123,7 +123,6 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     bigDecimal bigVal2 = {};
     bigDecimal remainder = {};
     bigDecimal zero = {};
-    bigDecimal tmp = {};
 
     mntCpyStd2Big(&value_1, &bigVal1);
     mntCpyStd2Big(&value_2, &bigVal2);
@@ -135,16 +134,7 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
         mntZero(result);
 
         mntBigDiv(bigVal1, bigVal2, &bigRes, &remainder);
-
-        while ((mntBigComp(remainder, zero) != 0) && (scale < 28)) {
-            multBigTen(&remainder);
-            multBigTen(&bigRes);
-            scale++;
-            mntBigDiv(remainder, bigVal2, &tmp, &remainder);
-            mntBigAdd(bigRes, tmp, &bigRes);
-        }
-        bigRes.pat.exp = (unsigned int)scale;
-        bigRes.pat.sgn = sgn ? 1 : 0;
+        divBigEngine(bigVal1, bigVal2, &bigRes, remainder);
 
         if (fixBigOverflow(&bigRes)) overflow = 1;
         mntCpyBig2Std(&bigRes, result);
@@ -154,8 +144,48 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     return ret;
 }
 
+// // 0 - OK
+// // 1 - INF
+// // 2 - MINF
+// // 3 - div by zero
 int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     int ret = 0;
+    int overflow = 0;
+
+    bigDecimal bigRes = {};
+    bigDecimal bigVal1 = {};
+    bigDecimal bigVal2 = {};
+    bigDecimal zero = {};
+    bigDecimal integer = {};
+    bigDecimal remainder = {};
+
+    mntCpyStd2Big(&value_1, &bigVal1);
+    mntCpyStd2Big(&value_2, &bigVal2);
+
+    if (!mntBigComp(bigVal2, zero)) {
+        ret = 3;
+    } else {
+        s21_zero_exp(result);
+        mntZero(result);
+
+        mntBigDiv(bigVal1, bigVal2, &bigRes, &remainder);
+        divBigEngine(bigVal1, bigVal2, &bigRes, remainder);
+
+        fixBigOverflow(&bigRes);
+        mntBigTruncate(&bigRes);
+        mntBigMul(bigRes, bigVal2, &bigRes);
+        bigRes.pat.exp = bigVal1.pat.exp > bigVal2.pat.exp ? bigVal1.pat.exp
+                                                           : bigVal2.pat.exp;
+
+        bigNormalization(&bigVal1, &bigRes);
+        mntBigSub(bigVal1, bigRes, &bigRes);
+
+        bigRes.pat.sgn = bigVal1.pat.sgn & bigVal2.pat.sgn;
+
+        if (fixBigOverflow(&bigRes)) overflow = 1;
+        if (overflow) mntBigTruncate(&bigRes);
+        mntCpyBig2Std(&bigRes, result);
+    }
 
     return ret;
 }
