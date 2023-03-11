@@ -25,7 +25,7 @@ int main() {
     s21_decimal ppp1 = {{0xfffffffe, 0xffffffff, 0xffffffff, 0x80000000}};
     s21_decimal ppp2 = {{15, 0x00000000, 0x00000000, 0x00000000}};
     s21_decimal res = {};
-    s21_decimal rem = {};
+    // s21_decimal rem = {};
     ppp1.pat.exp = 0;
     ppp2.pat.exp = 1;
 

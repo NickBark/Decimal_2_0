@@ -29,10 +29,10 @@ typedef union bigDecimal {
 enum Operations { ADD, MUL, SUB, DIV, ALL };
 
 //----------------------------------
-int isSetBit(int* num, int idx);
-void setBit(int* num, int idx);
-void resetBit(int* num, int idx);
-void inverseBit(int* num, int idx);
+int isSetBit(unsigned int* num, int idx);
+void setBit(unsigned int* num, int idx);
+void resetBit(unsigned int* num, int idx);
+void inverseBit(unsigned int* num, int idx);
 
 int getRow(int bit);
 int getCol(int bit);

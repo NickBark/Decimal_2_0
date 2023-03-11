@@ -156,7 +156,6 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     bigDecimal bigVal1 = {};
     bigDecimal bigVal2 = {};
     bigDecimal zero = {};
-    bigDecimal integer = {};
     bigDecimal remainder = {};
 
     mntCpyStd2Big(&value_1, &bigVal1);

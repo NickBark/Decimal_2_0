@@ -1,24 +1,24 @@
 #include "support.h"
 
-int isSetBit(int* num, int idx) {
+int isSetBit(unsigned int* num, int idx) {
     int idxRow = getRow(idx);
     int idxCol = getCol(idx);
     return (num[idxRow] & (1 << idxCol)) != 0;
 }
 
-void setBit(int* num, int idx) {
+void setBit(unsigned int* num, int idx) {
     int idxRow = getRow(idx);
     int idxCol = getCol(idx);
     num[idxRow] |= (1 << idxCol);
 }
 
-void resetBit(int* num, int idx) {
+void resetBit(unsigned int* num, int idx) {
     int idxRow = getRow(idx);
     int idxCol = getCol(idx);
     num[idxRow] &= ~(1 << idxCol);
 }
 
-void inverseBit(int* num, int idx) {
+void inverseBit(unsigned int* num, int idx) {
     int idxRow = getRow(idx);
     int idxCol = getCol(idx);
     num[idxRow] ^= (1 << idxCol);
@@ -329,6 +329,7 @@ int mntBigSub(bigDecimal val1, bigDecimal val2, bigDecimal* res) {
         inverseBit(res->bits, i);
     }
     res->pat.sgn = whoInv == 1 ? 0 : 1;
+    return ret;
 }
 
 // int mntSub(s21_decimal val1, s21_decimal val2, s21_decimal* res) {
