@@ -59,6 +59,8 @@ int mntBigDiv2(bigDecimal dividend, bigDecimal divisor, bigDecimal* res,
 
 void divBigEngine(bigDecimal dividend, bigDecimal divisor, bigDecimal* bigRes,
                   bigDecimal remainder);
+
+void mntBigRound(bigDecimal* val, bigDecimal rem);
 //----------------------------------
 
 void s21_zero_exp(s21_decimal* val);

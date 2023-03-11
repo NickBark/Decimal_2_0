@@ -294,9 +294,9 @@ int fixBigOverflow(bigDecimal* val) {
             ret = 1;
         mntBigDivByTen(*val, val, &rem);
     }
-    // Проверка бесконечности
 
-    // округление
+    mntBigRound(val, rem);
+
     return ret;
 }
 
@@ -698,5 +698,15 @@ void mntBigTruncate(bigDecimal* val) {
     while (scale) {
         mntBigDivByTen(*val, val, &rem);
         scale--;
+    }
+}
+
+void mntBigRound(bigDecimal* val, bigDecimal rem) {
+    if (rem.pat.mnt1 == (uint32_t)5) {
+        if (val->pat.mnt1 % (uint32_t)2 == 1) val->pat.mnt1++;
+    } else if (rem.pat.mnt1 < (uint32_t)5) {
+        val->pat.mnt1--;
+    } else if (rem.pat.mnt1 > (uint32_t)5) {
+        val->pat.mnt1++;
     }
 }
