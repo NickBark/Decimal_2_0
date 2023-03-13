@@ -22,23 +22,27 @@ int will_overflow(int a, int b) {
 }
 
 int main() {
-    s21_decimal ppp1 = {{0xffffffff, 0xffffffff, 0xffffffff, 0x00000000}};
-    s21_decimal ppp2 = {{15, 0x00000000, 0x00000000, 0x00000000}};
-    s21_decimal res = {};
+    s21_decimal a = {};
+    convertStr2Dec("-12345678912345678.9", &a);
+
+    printBit(a);
+    // s21_decimal ppp1 = {{0xffffffff, 0xffffffff, 0xffffffff, 0x00000000}};
+    // s21_decimal ppp2 = {{15, 0x00000000, 0x00000000, 0x00000000}};
+    // s21_decimal res = {};
     // s21_decimal rem = {};
-    ppp1.pat.exp = 0;
-    ppp2.pat.exp = 1;
+    // ppp1.pat.exp = 0;
+    // ppp2.pat.exp = 1;
 
-    printf("ppp1:");
-    printBit(ppp1);
+    // printf("ppp1:");
+    // printBit(ppp1);
 
-    printf("ppp2:");
-    printBit(ppp2);
+    // printf("ppp2:");
+    // printBit(ppp2);
 
-    printf("res: %u\n", s21_div(ppp1, ppp2, &res));
-    // printf("%u\n", res.pat.mnt1);
-    printf("rest:");
-    printBit(res);
+    // printf("res: %u\n", s21_div(ppp1, ppp2, &res));
+    // // printf("%u\n", res.pat.mnt1);
+    // printf("rest:");
+    // printBit(res);
 
     // printf("result: %d\n", s21_add(ppp1, ppp2, &res));
 

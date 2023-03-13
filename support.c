@@ -710,3 +710,40 @@ void mntBigRound(bigDecimal* val, bigDecimal rem) {
         val->pat.mnt1++;
     }
 }
+
+// Функции конвертации из строки в decimal (для тестов, для удобства)
+void convertStr2Dec(char* str, s21_decimal* val) {
+    int scale = 0;
+    int i = 0;
+    int c = 0;
+    bigDecimal tmp = {};
+    bigDecimal res = {};
+    char* end = str;
+    mntZero(val);
+    while (*end) end++;
+    end--;
+
+    while (end != str - 1) {
+        c = *end;
+        if (c == '-') {
+            res.pat.sgn = 1;
+        } else if (c == '.') {
+            res.pat.exp = scale;
+        } else {
+            c -= '0';
+            for (int j = 0; c != 0; j++) {
+                if (c & 1) setBit(tmp.bits, j);
+                c >>= 1;
+            }
+            for (int j = 0; j < i; j++) {
+                multBigTen(&tmp);
+            }
+            mntBigAdd(tmp, res, &res);
+            mntBigZero(&tmp);
+            i++;
+            scale++;
+        }
+        end--;
+    }
+    mntCpyBig2Std(&res, val);
+}

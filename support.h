@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "s21_decimal.h"
 
@@ -36,6 +37,8 @@ void inverseBit(unsigned int* num, int idx);
 
 int getRow(int bit);
 int getCol(int bit);
+
+void convertStr2Dec(char* str, s21_decimal* val);
 
 void bigNormalization(bigDecimal* val1, bigDecimal* val2);
 void multBigTen(bigDecimal* val);
