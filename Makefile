@@ -1,5 +1,5 @@
 CC= gcc
-CFLAGS=-g -Wall -Werror -Wextra -std=c11
+CFLAGS=-g -Werror -Wextra -std=c11
 SOURSES= s21_decimal.c test.c main.c arithmetic.c support.c compare.c
 OBJECTS=$(SOURSES:.c=.o)
 TEST_FLAGS=-lcheck $(shell pkg-config --cflags --libs check)
