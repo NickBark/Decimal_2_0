@@ -498,13 +498,15 @@ void divBigEngine(bigDecimal dividend, bigDecimal divisor, bigDecimal* bigRes,
     bigDecimal tmp = {};
 
     // надо тестить
-    do {
+
+    while (((mntBigComp(remainder, zero) != 0) && (scale < 28)) ||
+           (scale < 0)) {
         multBigTen(&remainder);
         multBigTen(bigRes);
         scale++;
         mntBigDiv(remainder, divisor, &tmp, &remainder);
         mntBigAdd(*bigRes, tmp, bigRes);
-    } while ((mntBigComp(remainder, zero) != 0) && (scale < 28));
+    };
 
     bigRes->pat.exp = (unsigned int)scale;
     bigRes->pat.sgn = sgn ? 1 : 0;

@@ -128,6 +128,42 @@ START_TEST(mul1) {
 }
 END_TEST
 
+START_TEST(div1) {
+    s21_decimal v1 = {};
+    s21_decimal v2 = {};
+    s21_decimal res = {};
+    s21_decimal check = {};
+
+    convertStr2Dec("12345.2345", &v1);
+    convertStr2Dec("125.45", &v2);
+    convertStr2Dec("98.40760860900757273814268633", &check);
+
+    ck_assert_int_eq(s21_div(v1, v2, &res), 0);
+
+    for (int i = 0; i < 4; i++) {
+        ck_assert_int_eq(res.bits[i], check.bits[i]);
+    }
+}
+END_TEST
+
+START_TEST(div2) {
+    s21_decimal v1 = {};
+    s21_decimal v2 = {};
+    s21_decimal res = {};
+    s21_decimal check = {};
+
+    convertStr2Dec("77777777777777777777777777777", &v1);
+    convertStr2Dec("77777777777777777777777777777", &v2);
+    convertStr2Dec("1", &check);
+
+    ck_assert_int_eq(s21_div(v1, v2, &res), 0);
+
+    for (int i = 0; i < 4; i++) {
+        ck_assert_int_eq(res.bits[i], check.bits[i]);
+    }
+}
+END_TEST
+
 Suite *s21_decimal_suite(void) {
     Suite *suite = suite_create("s21_decimal");
     // Набор разбивается на группы тестов, разделённых по каким-либо критериям.
@@ -140,6 +176,8 @@ Suite *s21_decimal_suite(void) {
     tcase_add_test(tcase_core, add3);
     tcase_add_test(tcase_core, add4);
     tcase_add_test(tcase_core, mul1);
+    tcase_add_test(tcase_core, div1);
+    tcase_add_test(tcase_core, div2);
 
     // Добавление теста в тестовый набор.
     suite_add_tcase(suite, tcase_core);
