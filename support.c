@@ -498,7 +498,6 @@ void divBigEngine(bigDecimal dividend, bigDecimal divisor, bigDecimal* bigRes,
     bigDecimal tmp = {};
 
     // надо тестить
-
     while (((mntBigComp(remainder, zero) != 0) && (scale < 28)) ||
            (scale < 0)) {
         multBigTen(&remainder);
@@ -704,6 +703,7 @@ void mntBigTruncate(bigDecimal* val) {
         mntBigDivByTen(*val, val, &rem);
         scale--;
     }
+    val->pat.exp = scale;
 }
 
 void mntBigRound(bigDecimal* val, bigDecimal rem) {

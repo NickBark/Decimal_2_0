@@ -128,6 +128,24 @@ START_TEST(mul1) {
 }
 END_TEST
 
+START_TEST(mul2) {
+    s21_decimal v1 = {};
+    s21_decimal v2 = {};
+    s21_decimal res = {};
+    s21_decimal check = {};
+
+    convertStr2Dec("0", &v1);
+    convertStr2Dec("-123412341234", &v2);
+    convertStr2Dec("-0", &check);
+
+    ck_assert_int_eq(s21_mul(v1, v2, &res), 0);
+
+    for (int i = 0; i < 4; i++) {
+        ck_assert_int_eq(res.bits[i], check.bits[i]);
+    }
+}
+END_TEST
+
 START_TEST(div1) {
     s21_decimal v1 = {};
     s21_decimal v2 = {};
@@ -176,6 +194,7 @@ Suite *s21_decimal_suite(void) {
     tcase_add_test(tcase_core, add3);
     tcase_add_test(tcase_core, add4);
     tcase_add_test(tcase_core, mul1);
+    tcase_add_test(tcase_core, mul2);
     tcase_add_test(tcase_core, div1);
     tcase_add_test(tcase_core, div2);
 

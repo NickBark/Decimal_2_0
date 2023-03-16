@@ -1,5 +1,5 @@
 CC= gcc
-CFLAGS=-g -Wall -Werror -Wextra -std=c11
+CFLAGS=-g -Werror -Wextra -std=c11
 SOURSES= s21_decimal.c test.c main.c arithmetic.c support.c compare.c
 OBJECTS=$(SOURSES:.c=.o)
 TEST_FLAGS=-lcheck $(shell pkg-config --cflags --libs check)
@@ -20,8 +20,11 @@ debug: $(LIB) main.o
 	$(CC) $(CFLAGS) main.o $(LIB) -lm -o debug
 
 test: $(LIB) test.o
-	$(CC) $(CFLAGS) test.o $(LIB) $(TEST_FLAGS) -o test
+	$(CC) $(CFLAGS) -g tests/*.c $(LIB) $(TEST_FLAGS) -o test
 	./test
+
+# $(CC) $(CFLAGS) test.o $(LIB) $(TEST_FLAGS) -o test
+# ./test
 
 add_coverage_flag: 
 	$(eval CFLAGS += --coverage)

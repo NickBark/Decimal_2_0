@@ -24,15 +24,27 @@ int will_overflow(int a, int b) {
 int main() {
     s21_decimal v1 = {};
     s21_decimal v2 = {};
-    s21_decimal result = {};
+    s21_decimal res = {};
+    s21_decimal check = {};
 
-    convertStr2Dec("77777777777777777777777777777", &v1);
-    convertStr2Dec("77777777777777777777777777777", &v2);
+    convertStr2Dec("79228162513759.439503", &v1);
+    convertStr2Dec("13.456", &v2);
+    convertStr2Dec("6.127503", &check);
 
-    s21_div(v1, v2, &result);
+    s21_mod(v1, v2, &res);
+    printBit(res);
 
-    printBit(result);
-    printf("\n\n\n");
+    // s21_decimal v1 = {};
+    // s21_decimal v2 = {};
+    // s21_decimal result = {};
+
+    // convertStr2Dec("77777777777777777777777777777", &v1);
+    // convertStr2Dec("77777777777777777777777777777", &v2);
+
+    // s21_div(v1, v2, &result);
+
+    // printBit(result);
+    // printf("\n\n\n");
 
     // s21_decimal a = {};
     // s21_decimal b = {};
@@ -48,24 +60,24 @@ int main() {
 
     // printBit(r);
 
-    s21_decimal ppp1 = {{0xffffffff, 0xffffffff, 0xffffffff, 0x00000000}};
-    s21_decimal ppp2 = {{15000, 0x00000000, 0x00000000, 0x00000000}};
-    s21_decimal res = {};
-    // s21_decimal rem = {};
-    ppp1.pat.exp = 0;
-    ppp2.pat.exp = 0;
+    // s21_decimal ppp1 = {{0xffffffff, 0xffffffff, 0xffffffff, 0x00000000}};
+    // s21_decimal ppp2 = {{15000, 0x00000000, 0x00000000, 0x00000000}};
+    // s21_decimal res = {};
+    // // s21_decimal rem = {};
+    // ppp1.pat.exp = 0;
+    // ppp2.pat.exp = 0;
 
-    printf("ppp1:");
-    printBit(ppp1);
+    // printf("ppp1:");
+    // printBit(ppp1);
 
-    printf("ppp2:");
-    printBit(ppp2);
+    // printf("ppp2:");
+    // printBit(ppp2);
 
-    printf("res: %u\n", s21_div(ppp1, ppp2, &res));
-    // printf("%u\n", res.pat.mnt1);
-    printf("rest:");
-    printBit(res);
-    printf("exp of res: %u\n", res.pat.exp);
+    // printf("res: %u\n", s21_div(ppp1, ppp2, &res));
+    // // printf("%u\n", res.pat.mnt1);
+    // printf("rest:");
+    // printBit(res);
+    // printf("exp of res: %u\n", res.pat.exp);
 
     // // printf("result: %d\n", s21_add(ppp1, ppp2, &res));
 
